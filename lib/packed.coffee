@@ -68,12 +68,12 @@ class Unpacker
     @bit_offset = @byte_offset = 0
 
   unpack: (buffer) ->
-    unpackd = {}
+    unpacked = {}
 
     offset = 0
     for name, field of @fields
       if field.unpack and typeof field.unpack is 'function'
-        [unpackd[name], @byte_offset, bit_offset] = field.unpack.call(@, buffer)
+        [unpacked[name], @byte_offset, bit_offset] = field.unpack.call(@, buffer)
         if bit_offset?
           @byte_offset += parseInt(bit_offset / 8)
           @bit_offset = bit_offset % 8
@@ -83,11 +83,11 @@ class Unpacker
         sub_unpackr.bit_offset = @bit_offset
         sub_unpackr.byte_offset = @byte_offset
         sub_unpackr.default_byte_order = @default_byte_order
-        unpackd[name] = sub_unpackr.unpack(buffer)
+        unpacked[name] = sub_unpackr.unpack(buffer)
         @bit_offset = sub_unpackr.bit_offset
         @byte_offset = sub_unpackr.byte_offset
 
-    unpackd
+    unpacked
 
 
 class Packer

@@ -162,14 +162,14 @@
     }
 
     Unpacker.prototype.unpack = function(buffer) {
-      var bit_offset, field, name, offset, struct, sub_unpackr, unpackd, _ref, _ref1;
-      unpackd = {};
+      var bit_offset, field, name, offset, struct, sub_unpackr, unpacked, _ref, _ref1;
+      unpacked = {};
       offset = 0;
       _ref = this.fields;
       for (name in _ref) {
         field = _ref[name];
         if (field.unpack && typeof field.unpack === 'function') {
-          _ref1 = field.unpack.call(this, buffer), unpackd[name] = _ref1[0], this.byte_offset = _ref1[1], bit_offset = _ref1[2];
+          _ref1 = field.unpack.call(this, buffer), unpacked[name] = _ref1[0], this.byte_offset = _ref1[1], bit_offset = _ref1[2];
           if (bit_offset != null) {
             this.byte_offset += parseInt(bit_offset / 8);
             this.bit_offset = bit_offset % 8;
@@ -183,12 +183,12 @@
           sub_unpackr.bit_offset = this.bit_offset;
           sub_unpackr.byte_offset = this.byte_offset;
           sub_unpackr.default_byte_order = this.default_byte_order;
-          unpackd[name] = sub_unpackr.unpack(buffer);
+          unpacked[name] = sub_unpackr.unpack(buffer);
           this.bit_offset = sub_unpackr.bit_offset;
           this.byte_offset = sub_unpackr.byte_offset;
         }
       }
-      return unpackd;
+      return unpacked;
     };
 
     return Unpacker;

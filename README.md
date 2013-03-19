@@ -1,6 +1,6 @@
 # packed
 
-Description of packed
+Pack and unpack structures to/from Buffers
 
 ## Installation
 ```

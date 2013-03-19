@@ -1,0 +1,38 @@
+{
+  "name": "packed",
+  "description": "",
+  "version": "0.0.1",
+  "homepage": "https://github.com/mattinsler/packed",
+  "author": {
+    "name": "Matt Insler",
+    "email": "matt.insler@gmail.com",
+    "url": "http://www.mattinsler.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mattinsler/packed.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mattinsler/packed/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/mattinsler/packed/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "dist/packed",
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.3.15",
+    "grunt-contrib": "~0.3.0",
+    "mocha": "latest",
+    "coffee-script": "latest"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha --compilers coffee:coffee-script -R spec"
+  },
+  "keywords": []
+}

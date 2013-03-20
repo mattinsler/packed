@@ -9,7 +9,9 @@
           return [buffer.readUInt8(this.byte_offset), this.byte_offset + 1];
         },
         pack: function(buffer, value) {
-          buffer.writeUInt8(value, this.byte_offset);
+          if (value != null) {
+            buffer.writeUInt8(value, this.byte_offset);
+          }
           return [this.byte_offset + 1];
         }
       };
@@ -21,7 +23,9 @@
           return [buffer['readUInt16' + this.default_byte_order.toUpperCase()](this.byte_offset), this.byte_offset + 2];
         },
         pack: function(buffer, value) {
-          buffer['writeUInt16' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          if (value != null) {
+            buffer['writeUInt16' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          }
           return [this.byte_offset + 2];
         }
       };
@@ -33,7 +37,9 @@
           return [buffer.readUInt16BE(this.byte_offset), this.byte_offset + 2];
         },
         pack: function(buffer, value) {
-          buffer.writeUInt16BE(value, this.byte_offset);
+          if (value != null) {
+            buffer.writeUInt16BE(value, this.byte_offset);
+          }
           return [this.byte_offset + 2];
         }
       };
@@ -45,7 +51,9 @@
           return [buffer.readUInt16LE(this.byte_offset), this.byte_offset + 2];
         },
         pack: function(buffer, value) {
-          buffer.writeUInt16LE(value, this.byte_offset);
+          if (value != null) {
+            buffer.writeUInt16LE(value, this.byte_offset);
+          }
           return [this.byte_offset + 2];
         }
       };
@@ -57,7 +65,9 @@
           return [buffer['readUInt32' + this.default_byte_order.toUpperCase()](this.byte_offset), this.byte_offset + 4];
         },
         pack: function(buffer, value) {
-          buffer['writeUInt32' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          if (value != null) {
+            buffer['writeUInt32' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          }
           return [this.byte_offset + 4];
         }
       };
@@ -69,7 +79,9 @@
           return [buffer.readUInt32BE(this.byte_offset), this.byte_offset + 4];
         },
         pack: function(buffer, value) {
-          buffer.writeUInt32BE(value, this.byte_offset);
+          if (value != null) {
+            buffer.writeUInt32BE(value, this.byte_offset);
+          }
           return [this.byte_offset + 4];
         }
       };
@@ -81,7 +93,9 @@
           return [buffer.readUInt32LE(this.byte_offset), this.byte_offset + 4];
         },
         pack: function(buffer, value) {
-          buffer.writeUInt32LE(value, this.byte_offset);
+          if (value != null) {
+            buffer.writeUInt32LE(value, this.byte_offset);
+          }
           return [this.byte_offset + 4];
         }
       };
@@ -98,9 +112,11 @@
         },
         pack: function(buffer, value) {
           var byte;
-          byte = buffer.readUInt8(this.byte_offset);
-          byte = byte | (value << (7 - this.bit_offset));
-          buffer.writeUInt8(byte, this.byte_offset);
+          if (value != null) {
+            byte = buffer.readUInt8(this.byte_offset);
+            byte = byte | (value << (7 - this.bit_offset));
+            buffer.writeUInt8(byte, this.byte_offset);
+          }
           return [this.byte_offset, this.bit_offset + num];
         }
       };
@@ -120,8 +136,10 @@
           return [buffer.slice(this.byte_offset, o).toString(encoding), o + 1];
         },
         pack: function(buffer, value) {
-          new Buffer(value, 'ascii').copy(buffer, this.byte_offset, 0, value.length);
-          buffer.writeUInt8(0, this.byte_offset + value.length);
+          if (value != null) {
+            new Buffer(value, 'ascii').copy(buffer, this.byte_offset, 0, value.length);
+            buffer.writeUInt8(0, this.byte_offset + value.length);
+          }
           return [this.byte_offset + value.length + 1];
         }
       };
@@ -140,10 +158,12 @@
     };
 
     Binary.prototype.pack = function(data) {
-      return new Packer({
-        fields: this.fields,
-        default_byte_order: this.default_byte_order
-      }).pack(data);
+      if (data != null) {
+        return new Packer({
+          fields: this.fields,
+          default_byte_order: this.default_byte_order
+        }).pack(data);
+      }
     };
 
     return Binary;
@@ -162,7 +182,7 @@
     }
 
     Unpacker.prototype.unpack = function(buffer) {
-      var bit_offset, field, name, offset, struct, sub_unpackr, unpacked, _ref, _ref1;
+      var bit_offset, field, name, offset, struct, sub_unpacker, unpacked, _ref, _ref1;
       unpacked = {};
       offset = 0;
       _ref = this.fields;
@@ -176,16 +196,16 @@
           }
         } else {
           struct = new Binary(field);
-          sub_unpackr = new Unpacker({
+          sub_unpacker = new Unpacker({
             fields: struct.fields,
             default_byte_order: struct.default_byte_order
           });
-          sub_unpackr.bit_offset = this.bit_offset;
-          sub_unpackr.byte_offset = this.byte_offset;
-          sub_unpackr.default_byte_order = this.default_byte_order;
-          unpacked[name] = sub_unpackr.unpack(buffer);
-          this.bit_offset = sub_unpackr.bit_offset;
-          this.byte_offset = sub_unpackr.byte_offset;
+          sub_unpacker.bit_offset = this.bit_offset;
+          sub_unpacker.byte_offset = this.byte_offset;
+          sub_unpacker.default_byte_order = this.default_byte_order;
+          unpacked[name] = sub_unpacker.unpack(buffer);
+          this.bit_offset = sub_unpacker.bit_offset;
+          this.byte_offset = sub_unpacker.byte_offset;
         }
       }
       return unpacked;
@@ -216,7 +236,7 @@
       for (name in _ref) {
         field = _ref[name];
         if (field.pack && typeof field.pack === 'function') {
-          _ref1 = field.pack.call(this, buffer, data[name]), this.byte_offset = _ref1[0], bit_offset = _ref1[1];
+          _ref1 = field.pack.call(this, buffer, data != null ? data[name] : void 0), this.byte_offset = _ref1[0], bit_offset = _ref1[1];
           if (bit_offset != null) {
             if (bit_offset >= 8) {
               this.byte_offset += parseInt(bit_offset / 8);

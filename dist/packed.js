@@ -3,6 +3,104 @@
 
   Binary = (function() {
 
+    Binary.Int8 = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readInt8(this.byte_offset), this.byte_offset + 1];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeInt8(value, this.byte_offset);
+          }
+          return [this.byte_offset + 1];
+        }
+      };
+    };
+
+    Binary.Int16 = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer['readInt16' + this.default_byte_order.toUpperCase()](this.byte_offset), this.byte_offset + 2];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer['writeInt16' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          }
+          return [this.byte_offset + 2];
+        }
+      };
+    };
+
+    Binary.Int16BE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readInt16BE(this.byte_offset), this.byte_offset + 2];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeInt16BE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 2];
+        }
+      };
+    };
+
+    Binary.Int16LE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readInt16LE(this.byte_offset), this.byte_offset + 2];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeInt16LE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 2];
+        }
+      };
+    };
+
+    Binary.Int32 = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer['readInt32' + this.default_byte_order.toUpperCase()](this.byte_offset), this.byte_offset + 4];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer['writeInt32' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          }
+          return [this.byte_offset + 4];
+        }
+      };
+    };
+
+    Binary.Int32BE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readInt32BE(this.byte_offset), this.byte_offset + 4];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeInt32BE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 4];
+        }
+      };
+    };
+
+    Binary.Int32LE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readInt32LE(this.byte_offset), this.byte_offset + 4];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeInt32LE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 4];
+        }
+      };
+    };
+
     Binary.UInt8 = function() {
       return {
         unpack: function(buffer) {
@@ -269,6 +367,42 @@
   binary = function(fields) {
     return new Binary(fields);
   };
+
+  binary.__defineGetter__('int8', function() {
+    return Binary.Int8();
+  });
+
+  binary.__defineGetter__('int16', function() {
+    return Binary.Int16();
+  });
+
+  binary.__defineGetter__('int16be', function() {
+    return Binary.Int16BE();
+  });
+
+  binary.__defineGetter__('int16le', function() {
+    return Binary.Int16LE();
+  });
+
+  binary.__defineGetter__('int16n', function() {
+    return Binary.Int16BE();
+  });
+
+  binary.__defineGetter__('int32', function() {
+    return Binary.Int32();
+  });
+
+  binary.__defineGetter__('int32be', function() {
+    return Binary.Int32BE();
+  });
+
+  binary.__defineGetter__('int32le', function() {
+    return Binary.Int32LE();
+  });
+
+  binary.__defineGetter__('int32n', function() {
+    return Binary.Int32BE();
+  });
 
   binary.__defineGetter__('uint8', function() {
     return Binary.UInt8();

@@ -1,4 +1,33 @@
 class Binary
+  @Int8: -> {
+    unpack: (buffer) -> [buffer.readInt8(@byte_offset), @byte_offset + 1]
+    pack: (buffer, value) -> buffer.writeInt8(value, @byte_offset) if value?; [@byte_offset + 1]
+  }
+  @Int16: -> {
+    unpack: (buffer) -> [buffer['readInt16' + @default_byte_order.toUpperCase()](@byte_offset), @byte_offset + 2]
+    pack: (buffer, value) -> buffer['writeInt16' + @default_byte_order.toUpperCase()](value, @byte_offset)  if value?; [@byte_offset + 2]
+  }
+  @Int16BE: -> {
+    unpack: (buffer) -> [buffer.readInt16BE(@byte_offset), @byte_offset + 2]
+    pack: (buffer, value) -> buffer.writeInt16BE(value, @byte_offset) if value?; [@byte_offset + 2]
+  }
+  @Int16LE: -> {
+    unpack: (buffer) -> [buffer.readInt16LE(@byte_offset), @byte_offset + 2]
+    pack: (buffer, value) -> buffer.writeInt16LE(value, @byte_offset) if value?; [@byte_offset + 2]
+  }
+  @Int32: -> {
+    unpack: (buffer) -> [buffer['readInt32' + @default_byte_order.toUpperCase()](@byte_offset), @byte_offset + 4]
+    pack: (buffer, value) -> buffer['writeInt32' + @default_byte_order.toUpperCase()](value, @byte_offset) if value?; [@byte_offset + 4]
+  }
+  @Int32BE: -> {
+    unpack: (buffer) -> [buffer.readInt32BE(@byte_offset), @byte_offset + 4]
+    pack: (buffer, value) -> buffer.writeInt32BE(value, @byte_offset) if value?; [@byte_offset + 4]
+  }
+  @Int32LE: -> {
+    unpack: (buffer) -> [buffer.readInt32LE(@byte_offset), @byte_offset + 4]
+    pack: (buffer, value) -> buffer.writeInt32LE(value, @byte_offset) if value?; [@byte_offset + 4]
+  }
+  
   @UInt8: -> {
     unpack: (buffer) -> [buffer.readUInt8(@byte_offset), @byte_offset + 1]
     pack: (buffer, value) -> buffer.writeUInt8(value, @byte_offset) if value?; [@byte_offset + 1]
@@ -122,6 +151,16 @@ class Packer
 
 binary = (fields) ->
   new Binary(fields)
+
+binary.__defineGetter__ 'int8', -> Binary.Int8()
+binary.__defineGetter__ 'int16', -> Binary.Int16()
+binary.__defineGetter__ 'int16be', -> Binary.Int16BE()
+binary.__defineGetter__ 'int16le', -> Binary.Int16LE()
+binary.__defineGetter__ 'int16n', -> Binary.Int16BE()
+binary.__defineGetter__ 'int32', -> Binary.Int32()
+binary.__defineGetter__ 'int32be', -> Binary.Int32BE()
+binary.__defineGetter__ 'int32le', -> Binary.Int32LE()
+binary.__defineGetter__ 'int32n', -> Binary.Int32BE()
 
 binary.__defineGetter__ 'uint8', -> Binary.UInt8()
 binary.__defineGetter__ 'uint16', -> Binary.UInt16()

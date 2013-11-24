@@ -27,6 +27,18 @@ class Binary
     unpack: (buffer) -> [buffer.readInt32LE(@byte_offset), @byte_offset + 4]
     pack: (buffer, value) -> buffer.writeInt32LE(value, @byte_offset) if value?; [@byte_offset + 4]
   }
+  @Int64: -> {
+    unpack: (buffer) -> [buffer['readDouble' + @default_byte_order.toUpperCase()](@byte_offset), @byte_offset + 8]
+    pack: (buffer, value) -> buffer['writeDouble' + @default_byte_order.toUpperCase()](value, @byte_offset) if value?; [@byte_offset + 8]
+  }
+  @Int64BE: -> {
+    unpack: (buffer) -> [buffer.readDoubleBE(@byte_offset), @byte_offset + 8]
+    pack: (buffer, value) -> buffer.writeDoubleBE(value, @byte_offset) if value?; [@byte_offset + 8]
+  }
+  @Int64LE: -> {
+    unpack: (buffer) -> [buffer.readDoubleLE(@byte_offset), @byte_offset + 8]
+    pack: (buffer, value) -> buffer.writeDoubleLE(value, @byte_offset) if value?; [@byte_offset + 8]
+  }
   
   @UInt8: -> {
     unpack: (buffer) -> [buffer.readUInt8(@byte_offset), @byte_offset + 1]
@@ -55,6 +67,18 @@ class Binary
   @UInt32LE: -> {
     unpack: (buffer) -> [buffer.readUInt32LE(@byte_offset), @byte_offset + 4]
     pack: (buffer, value) -> buffer.writeUInt32LE(value, @byte_offset) if value?; [@byte_offset + 4]
+  }
+  @UInt64: -> {
+    unpack: (buffer) -> [buffer['readDouble' + @default_byte_order.toUpperCase()](@byte_offset), @byte_offset + 8]
+    pack: (buffer, value) -> buffer['writeDouble' + @default_byte_order.toUpperCase()](value, @byte_offset) if value?; [@byte_offset + 8]
+  }
+  @UInt64BE: -> {
+    unpack: (buffer) -> [buffer.readDoubleBE(@byte_offset), @byte_offset + 8]
+    pack: (buffer, value) -> buffer.writeDoubleBE(value, @byte_offset) if value?; [@byte_offset + 8]
+  }
+  @UInt64LE: -> {
+    unpack: (buffer) -> [buffer.readDoubleLE(@byte_offset), @byte_offset + 8]
+    pack: (buffer, value) -> buffer.writeDoubleLE(value, @byte_offset) if value?; [@byte_offset + 8]
   }
   
   @Bits: (num) -> {
@@ -161,6 +185,10 @@ binary.__defineGetter__ 'int32', -> Binary.Int32()
 binary.__defineGetter__ 'int32be', -> Binary.Int32BE()
 binary.__defineGetter__ 'int32le', -> Binary.Int32LE()
 binary.__defineGetter__ 'int32n', -> Binary.Int32BE()
+binary.__defineGetter__ 'int64', -> Binary.Int64()
+binary.__defineGetter__ 'int64be', -> Binary.Int64BE()
+binary.__defineGetter__ 'int64le', -> Binary.Int64LE()
+binary.__defineGetter__ 'int64n', -> Binary.Int64BE()
 
 binary.__defineGetter__ 'uint8', -> Binary.UInt8()
 binary.__defineGetter__ 'uint16', -> Binary.UInt16()
@@ -171,6 +199,11 @@ binary.__defineGetter__ 'uint32', -> Binary.UInt32()
 binary.__defineGetter__ 'uint32be', -> Binary.UInt32BE()
 binary.__defineGetter__ 'uint32le', -> Binary.UInt32LE()
 binary.__defineGetter__ 'uint32n', -> Binary.UInt32BE()
+binary.__defineGetter__ 'uint64', -> Binary.UInt64()
+binary.__defineGetter__ 'uint64be', -> Binary.UInt64BE()
+binary.__defineGetter__ 'uint64le', -> Binary.UInt64LE()
+binary.__defineGetter__ 'uint64n', -> Binary.UInt64BE()
+
 binary.__defineGetter__ 'string', -> Binary.String()
 binary.bits = Binary.Bits
 

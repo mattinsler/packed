@@ -101,6 +101,48 @@
       };
     };
 
+    Binary.Int64 = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer['readDouble' + this.default_byte_order.toUpperCase()](this.byte_offset), this.byte_offset + 8];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer['writeDouble' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          }
+          return [this.byte_offset + 8];
+        }
+      };
+    };
+
+    Binary.Int64BE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readDoubleBE(this.byte_offset), this.byte_offset + 8];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeDoubleBE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 8];
+        }
+      };
+    };
+
+    Binary.Int64LE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readDoubleLE(this.byte_offset), this.byte_offset + 8];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeDoubleLE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 8];
+        }
+      };
+    };
+
     Binary.UInt8 = function() {
       return {
         unpack: function(buffer) {
@@ -195,6 +237,48 @@
             buffer.writeUInt32LE(value, this.byte_offset);
           }
           return [this.byte_offset + 4];
+        }
+      };
+    };
+
+    Binary.UInt64 = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer['readDouble' + this.default_byte_order.toUpperCase()](this.byte_offset), this.byte_offset + 8];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer['writeDouble' + this.default_byte_order.toUpperCase()](value, this.byte_offset);
+          }
+          return [this.byte_offset + 8];
+        }
+      };
+    };
+
+    Binary.UInt64BE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readDoubleBE(this.byte_offset), this.byte_offset + 8];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeDoubleBE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 8];
+        }
+      };
+    };
+
+    Binary.UInt64LE = function() {
+      return {
+        unpack: function(buffer) {
+          return [buffer.readDoubleLE(this.byte_offset), this.byte_offset + 8];
+        },
+        pack: function(buffer, value) {
+          if (value != null) {
+            buffer.writeDoubleLE(value, this.byte_offset);
+          }
+          return [this.byte_offset + 8];
         }
       };
     };
@@ -404,6 +488,22 @@
     return Binary.Int32BE();
   });
 
+  binary.__defineGetter__('int64', function() {
+    return Binary.Int64();
+  });
+
+  binary.__defineGetter__('int64be', function() {
+    return Binary.Int64BE();
+  });
+
+  binary.__defineGetter__('int64le', function() {
+    return Binary.Int64LE();
+  });
+
+  binary.__defineGetter__('int64n', function() {
+    return Binary.Int64BE();
+  });
+
   binary.__defineGetter__('uint8', function() {
     return Binary.UInt8();
   });
@@ -438,6 +538,22 @@
 
   binary.__defineGetter__('uint32n', function() {
     return Binary.UInt32BE();
+  });
+
+  binary.__defineGetter__('uint64', function() {
+    return Binary.UInt64();
+  });
+
+  binary.__defineGetter__('uint64be', function() {
+    return Binary.UInt64BE();
+  });
+
+  binary.__defineGetter__('uint64le', function() {
+    return Binary.UInt64LE();
+  });
+
+  binary.__defineGetter__('uint64n', function() {
+    return Binary.UInt64BE();
   });
 
   binary.__defineGetter__('string', function() {

@@ -39,7 +39,7 @@ class Binary
     unpack: (buffer) -> [buffer.readDoubleLE(@byte_offset), @byte_offset + 8]
     pack: (buffer, value) -> buffer.writeDoubleLE(value, @byte_offset) if value?; [@byte_offset + 8]
   }
-  
+
   @UInt8: -> {
     unpack: (buffer) -> [buffer.readUInt8(@byte_offset), @byte_offset + 1]
     pack: (buffer, value) -> buffer.writeUInt8(value, @byte_offset) if value?; [@byte_offset + 1]
@@ -80,7 +80,7 @@ class Binary
     unpack: (buffer) -> [buffer.readDoubleLE(@byte_offset), @byte_offset + 8]
     pack: (buffer, value) -> buffer.writeDoubleLE(value, @byte_offset) if value?; [@byte_offset + 8]
   }
-  
+
   @Bits: (num) -> {
     unpack: (buffer) ->
       byte = buffer.readUInt8(@byte_offset)
@@ -94,7 +94,7 @@ class Binary
         buffer.writeUInt8(byte, @byte_offset)
       [@byte_offset, @bit_offset + num]
   }
-  
+
   @String: (encoding = 'ascii') -> {
     unpack: (buffer) ->
       o = @byte_offset
@@ -102,17 +102,18 @@ class Binary
       [buffer.slice(@byte_offset, o).toString(encoding), o + 1]
     pack: (buffer, value) ->
       if value?
-        new Buffer(value, 'ascii').copy(buffer, @byte_offset, 0, value.length)
+        b = new Buffer(value, encoding)
+        b.copy(buffer, @byte_offset, 0, b.length)
         buffer.writeUInt8(0, @byte_offset + value.length)
       [@byte_offset + value.length + 1]
   }
-  
+
   constructor: (@fields) ->
     @default_byte_order = 'BE'
-  
+
   unpack: (buffer) ->
     new Unpacker(fields: @fields, default_byte_order: @default_byte_order).unpack(buffer)
-  
+
   pack: (data) ->
     new Packer(fields: @fields, default_byte_order: @default_byte_order).pack(data) if data?
 
@@ -149,11 +150,11 @@ class Packer
   constructor: (b) ->
     @[k] = v for k, v of b
     @bit_offset = @byte_offset = 0
-  
+
   pack: (data, use_this_buffer) ->
     buffer = use_this_buffer or new Buffer(1024)
     buffer.fill(0) unless use_this_buffer?
-    
+
     for name, field of @fields
       if field.pack and typeof field.pack is 'function'
         [@byte_offset, bit_offset] = field.pack.call(@, buffer, data?[name])
@@ -169,7 +170,7 @@ class Packer
         sub_buffer = sub_packer.pack(data[name], buffer)
         @bit_offset = sub_packer.bit_offset
         @byte_offset = sub_packer.byte_offset
-    
+
     buffer.slice(0, @byte_offset) unless use_this_buffer?
 
 

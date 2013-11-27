@@ -318,8 +318,10 @@
           return [buffer.slice(this.byte_offset, o).toString(encoding), o + 1];
         },
         pack: function(buffer, value) {
+          var b;
           if (value != null) {
-            new Buffer(value, 'ascii').copy(buffer, this.byte_offset, 0, value.length);
+            b = new Buffer(value, encoding);
+            b.copy(buffer, this.byte_offset, 0, b.length);
             buffer.writeUInt8(0, this.byte_offset + value.length);
           }
           return [this.byte_offset + value.length + 1];
@@ -339,12 +341,12 @@
       }).unpack(buffer);
     };
 
-    Binary.prototype.pack = function(data) {
+    Binary.prototype.pack = function(data, buffer) {
       if (data != null) {
         return new Packer({
           fields: this.fields,
           default_byte_order: this.default_byte_order
-        }).pack(data);
+        }).pack(data, buffer);
       }
     };
 
@@ -442,6 +444,7 @@
       if (use_this_buffer == null) {
         return buffer.slice(0, this.byte_offset);
       }
+      return this.byte_offset;
     };
 
     return Packer;

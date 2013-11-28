@@ -1,7 +1,7 @@
 {
   "name": "packed",
   "description": "Binary Buffer parsing and packing that feels a little like C structs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/mattinsler/packed",
   "author": {
     "name": "Matt Insler",

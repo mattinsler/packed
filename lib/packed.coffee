@@ -114,9 +114,8 @@ class Binary
   unpack: (buffer) ->
     new Unpacker(fields: @fields, default_byte_order: @default_byte_order).unpack(buffer)
 
-  pack: (data) ->
-    new Packer(fields: @fields, default_byte_order: @default_byte_order).pack(data) if data?
-
+  pack: (data, buffer) ->
+    new Packer(fields: @fields, default_byte_order: @default_byte_order).pack(data, buffer) if data?
 
 class Unpacker
   constructor: (b) ->
@@ -171,8 +170,8 @@ class Packer
         @bit_offset = sub_packer.bit_offset
         @byte_offset = sub_packer.byte_offset
 
-    buffer.slice(0, @byte_offset) unless use_this_buffer?
-
+    return buffer.slice(0, @byte_offset) unless use_this_buffer?
+    return @byte_offset
 
 binary = (fields) ->
   new Binary(fields)
